@@ -1,5 +1,6 @@
 package com.example.spotick;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,14 +17,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
-    private ArrayList<Post> PostList = new ArrayList<>();
-    private PostAdapter arrayAdapter;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -34,13 +35,18 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_dashboard:
+                    Intent intent_add = new Intent(MainActivity.this, AddActivity.class);
+                    startActivity(intent_add);
                     return true;
                 case R.id.navigation_notifications:
+                    Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
+                    startActivity(intent_user);
                     return true;
             }
             return false;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +67,29 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-
-        // Attach a ChildEventListener to the teacher database, so we can retrieve the teacher entries
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                // Get the value from the DataSnapshot and add it to the teachers' list
                 Post singlePost = dataSnapshot.getValue(Post.class);
-//                PostList.add(singlePost);
-                PostList.add(new Post( singlePost.id, singlePost.shortText, singlePost.geo, (long) singlePost.data, singlePost.imageid, singlePost.img, (Long) singlePost.likes.get("count"), (String) singlePost.user.get("name"), (String) singlePost.user.get("color")));
+                PostList.add(new Post(
+                        singlePost.id,
+                        singlePost.shortText,
+                        singlePost.geo, (long)
+                        singlePost.data,
+                        singlePost.imageid,
+                        singlePost.img, (Long)
+                        singlePost.likes.get("count"),
+                        (String) singlePost.user.get("name"),
+                        (String) singlePost.user.get("color")
+                ));
+
+                Collections.sort(PostList, new Comparator<Post>(){
+                    public int compare(Post obj1, Post obj2) {
+                         return Long.valueOf(obj2.data).compareTo(Long.valueOf(obj1.data));
+                    }
+                });
+
                 adapter.notifyDataSetChanged();
             }
 
