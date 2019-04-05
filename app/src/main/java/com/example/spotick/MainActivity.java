@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent_add);
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
+                    Intent intent_user = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent_user);
                     return true;
             }
