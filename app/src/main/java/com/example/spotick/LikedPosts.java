@@ -11,6 +11,7 @@ public class LikedPosts extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.liked_posts, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.grid_view_liked_posts);
 

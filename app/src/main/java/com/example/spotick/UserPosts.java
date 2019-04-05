@@ -15,7 +15,6 @@ public class UserPosts extends Fragment {
         View view = inflater.inflate(R.layout.user_posts, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.grid_view_user_posts);
 
-        // Instance of ImageAdapter Class
         gridView.setAdapter(new UserPostsAdapter(view.getContext()));
         return view;
     }
