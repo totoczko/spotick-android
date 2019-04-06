@@ -48,9 +48,9 @@ public class User implements Parcelable {
         return id;
     }
 
-    public Character getUserFirstLetter(){
+    public String getUserFirstLetter(){
         Character lower = username.charAt(0);
-        Character upper = Character.toUpperCase(lower);
+        String upper = String.valueOf(Character.toUpperCase(lower));
         return upper;
     }
 
