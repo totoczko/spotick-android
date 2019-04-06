@@ -12,15 +12,8 @@
         />
 
     <size
-        android:width="36dp"
-        android:height="36dp"
+        android:width="40dp"
+        android:height="40dp"
         />
-
-    <padding
-        android:left="16dp"
-        android:top="12dp"
-        android:right="16dp"
-        android:bottom="12dp"    >
-    </padding>
 
 </shape>

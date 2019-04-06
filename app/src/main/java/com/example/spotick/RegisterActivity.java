@@ -18,6 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Random;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -25,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout inputEmail, inputPassword, inputUsername;
     private Button btnRegister;
     private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseRef;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -61,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputEmail = (TextInputLayout) findViewById(R.id.email_input);
         inputPassword = (TextInputLayout) findViewById(R.id.password_input);
         inputUsername = (TextInputLayout) findViewById(R.id.username_input);
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("users");
 
         btnRegister.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -77,17 +85,31 @@ public class RegisterActivity extends AppCompatActivity {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        FirebaseUser user = auth.getCurrentUser();
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(username)
-                                .build();
-                        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                                finish();
-                            }
-                        });
+                        if (task.isSuccessful()) {
+                            FirebaseUser currentUser = auth.getCurrentUser();
+                           if(currentUser != null){
+                               String id =  currentUser.getUid();
+                               String color = generateColor();
+
+                               writeNewUser(id, email, username, color);
+
+                               UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                       .setDisplayName(username)
+                                       .build();
+
+                               currentUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<Void> task) {
+                                       startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                       finish();
+                                   }
+                               });
+                           }
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
             }
@@ -102,5 +124,18 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent_login = new Intent(this, LoginActivity.class);
         startActivity(intent_login);
     }
+
+    private void writeNewUser(String id, String email, String username, String color) {
+        User user = new User(id, email, username, color);
+        databaseRef.child(id).setValue(user);
+    }
+    
+    private String generateColor() {
+        Random random = new Random();
+        int nextInt = random.nextInt(0xffffff + 1);
+        String color = String.format("#%06x", nextInt);
+        return color;
+    }
+    
 
 }

@@ -23,8 +23,8 @@
 
             <TextView
                 android:id="@+id/avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:text="M"
                 android:layout_alignParentTop="true"
                 tools:layout_editor_absoluteX="0dp"
@@ -32,7 +32,9 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/avatar"
                 android:textColor="#FFF"
+                android:textSize="18dp"
                 android:textAlignment="center"
+                android:paddingTop="7dp"
                 />
 
             <TextView
