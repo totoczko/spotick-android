@@ -7,31 +7,28 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
 public class UserLikesAdapter extends BaseAdapter {
     private Context mContext;
-
-    // Keep all Images in array
-    public Integer[] mThumbIds = {
-            R.drawable.boo,R.drawable.boo,
-            R.drawable.boo,R.drawable.boo,
-            R.drawable.boo,R.drawable.boo,
-            R.drawable.boo,R.drawable.boo,
-            R.drawable.boo
-    };
+    private List mThumbIds;
 
     // Constructor
-    public UserLikesAdapter(Context c){
+    public UserLikesAdapter(Context c, List t){
         mContext = c;
+        mThumbIds = t;
     }
 
     @Override
     public int getCount() {
-        return mThumbIds.length;
+        return mThumbIds.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mThumbIds[position];
+        return mThumbIds.get(position);
     }
 
     @Override
@@ -42,10 +39,11 @@ public class UserLikesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mContext);
-        imageView.setImageResource(mThumbIds[position]);
+        Glide.with(mContext)
+                .load(mThumbIds.get(position))
+                .into(imageView);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(550, 550));
         return imageView;
     }
-
 }
