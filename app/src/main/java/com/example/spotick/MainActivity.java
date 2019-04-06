@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
-
     private FirebaseAuth mAuth;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -98,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         singlePost.img, (Long)
                         singlePost.likes.get("count"),
                         (String) singlePost.user.get("name"),
-                        (String) singlePost.user.get("color")
+                        (String) singlePost.user.get("color"),
+                        (String) singlePost.user.get("id")
                 ));
 
                 Collections.sort(PostList, new Comparator<Post>(){

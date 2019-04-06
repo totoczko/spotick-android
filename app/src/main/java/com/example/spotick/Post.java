@@ -24,6 +24,7 @@ public class Post implements Parcelable {
     public Map<String, Object> user = new HashMap<>();
     public String userName;
     public String userColor;
+    public String userId;
     public Map<String, Object> likes = new HashMap<>();
     public Long likesCount;
 
@@ -31,7 +32,7 @@ public class Post implements Parcelable {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Post(String id, String shortText, String geo, Long data, String imageid, String img, Long likesCount, String userName, String userColor) {
+    public Post(String id, String shortText, String geo, Long data, String imageid, String img, Long likesCount, String userName, String userColor, String userId) {
         this.id = id;
         this.shortText = shortText;
         this.geo = geo;
@@ -41,6 +42,7 @@ public class Post implements Parcelable {
         this.likesCount = likesCount;
         this.userName = userName;
         this.userColor= userColor;
+        this.userId= userId;
     }
 
     protected Post(Parcel in) {
@@ -53,6 +55,7 @@ public class Post implements Parcelable {
         likesCount = in.readLong();
         userName = in.readString();
         userColor = in.readString();
+        userId = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -80,6 +83,9 @@ public class Post implements Parcelable {
     }
     public String getUserColor() {
         return userColor;
+    }
+    public String getUserId() {
+        return userId;
     }
 
     public Character getUserFirstLetter(){
@@ -133,6 +139,9 @@ public class Post implements Parcelable {
         dest.writeLong(data);
         dest.writeString(imageid);
         dest.writeString(img);
+        dest.writeString(userName);
+        dest.writeString(userColor);
+        dest.writeString(userId);
     }
 
 }
