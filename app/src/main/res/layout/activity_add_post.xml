@@ -7,30 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".AddActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_add"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/user_tabs"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintTop_toBottomOf="@+id/user_tabs"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Add post"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/camera_button"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toBottomOf="@+id/camera_tabs"
+        android:layout_marginBottom="8dp"
+        android:text="Dalej"
+        app:layout_constraintBottom_toTopOf="@+id/add_tabs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_camera" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/camera_tabs"
+        android:id="@+id/add_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"

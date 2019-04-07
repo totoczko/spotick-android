@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LikedPosts extends Fragment {
+public class UserLikes extends Fragment {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
@@ -30,7 +30,7 @@ public class LikedPosts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.liked_posts, container, false);
+        View view = inflater.inflate(R.layout.user_liked_posts, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.grid_view_liked_posts);
 
         mAuth = FirebaseAuth.getInstance();
@@ -89,4 +89,5 @@ public class LikedPosts extends Fragment {
 
         return view;
     }
+
 }

@@ -60,7 +60,7 @@ public class UserActivity extends AppCompatActivity {
 
 
         if(currentUser != null){
-            setContentView(R.layout.user_layout);
+            setContentView(R.layout.activity_user);
 
             String uid = currentUser.getUid();
             database = FirebaseDatabase.getInstance();
@@ -97,8 +97,6 @@ public class UserActivity extends AppCompatActivity {
             usersRef.addValueEventListener(userListener);
 
             TabLayout tabLayout = findViewById(R.id.user_tabs);
-            tabLayout.addTab(tabLayout.newTab().setText("Moje posty"));
-            tabLayout.addTab(tabLayout.newTab().setText("Polubione"));
             tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
             final ViewPager viewPager = findViewById(R.id.pager);
