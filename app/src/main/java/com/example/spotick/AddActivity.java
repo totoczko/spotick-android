@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,6 +33,7 @@ public class AddActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
+    private FirebaseAuth auth;
     private LocationManager locationManager;
     private double longitude;
     private double latitude;
@@ -43,6 +45,9 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
+        auth = FirebaseAuth.getInstance();
+
+        // Tabs
         TabLayout tabLayout = findViewById(R.id.add_tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -75,6 +80,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
 
+        // get city
         if(ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(AddActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)){
                 ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_REQUEST_LOCATION);
@@ -93,8 +99,9 @@ public class AddActivity extends AppCompatActivity {
             }
         }
 
-    }
 
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,  int[] grantResults) {
@@ -143,6 +150,7 @@ public class AddActivity extends AppCompatActivity {
             uploadedImage.setImageURI(fullPhotoUri);
         }
     }
+
 
 
 }

@@ -88,9 +88,9 @@ public class Post implements Parcelable {
         return userId;
     }
 
-    public Character getUserFirstLetter(){
+    public String getUserFirstLetter(){
         Character lower = userName.charAt(0);
-        Character upper = Character.toUpperCase(lower);
+        String upper = String.valueOf(Character.toUpperCase(lower));
         return upper;
     }
 
@@ -110,13 +110,18 @@ public class Post implements Parcelable {
         return geo;
     }
 
-    public String getData() {
+    public long getData() {
+        return data;
+    }
+
+    public String getDataString() {
         String pattern = "dd MMMM HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         Date postDate = new Date(data);
         String dateString = df.format(postDate);
         return dateString;
     }
+
 
     public String getImageid() {
         return imageid;

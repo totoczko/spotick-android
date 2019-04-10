@@ -42,7 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
         holder.shortText.setText(mData.get(position).getShortText());
         holder.likesCounter.setText(String.valueOf(mData.get(position).getLikesCount()));
         holder.location.setText(mData.get(position).getGeo());
-        holder.date.setText(mData.get(position).getData());
+        holder.date.setText(mData.get(position).getDataString());
         holder.userName.setText(mData.get(position).getUserName());
         holder.avatar.setText(String.valueOf(mData.get(position).getUserFirstLetter()));
         String color = mData.get(position).getUserColor();
