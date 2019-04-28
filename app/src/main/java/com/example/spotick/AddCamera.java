@@ -1,11 +1,15 @@
 package com.example.spotick;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -17,10 +21,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+
 
 public class AddCamera extends Fragment implements SurfaceHolder.Callback {
 
+    public static final int TAKE_PHOTO = 1;
+    private static Uri tempUri;
 
     ImageView btnCapture;
     Camera camera;
@@ -29,9 +38,7 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
     Camera.PictureCallback jpegCallback;
     ImageView preview;
 
-    final int CAMERA_REQUEST_CODE= 1;
-
-    private static final int Image_Capture_Code = 1;
+    final int REQUEST_CODE= 1;
 
     public static AddCamera newInstance(){
         AddCamera fragment = new AddCamera();
@@ -46,8 +53,10 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
         imgCapture = (SurfaceView)  view.findViewById(R.id.camera);
 
         surfaceHolder = imgCapture.getHolder();
-        if(ActivityCompat.checkSelfPermission(getContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        if(ActivityCompat.checkSelfPermission(getContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ){
+            ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.CAMERA}, REQUEST_CODE);
+        }else if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+
         }else{
             surfaceHolder.addCallback(this);
             surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -70,6 +79,11 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
                 Bitmap rotatedBitmap = rotate(decodedBitmap);
 
                 preview.setImageBitmap(rotatedBitmap);
+                camera.stopPreview();
+                camera.release();
+
+                tempUri = getImageUri(getActivity().getApplicationContext(), rotatedBitmap);
+
             }
         };
 
@@ -86,6 +100,7 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
         int h = decodedBitmap.getHeight();
         Matrix matrix = new Matrix();
         matrix.setRotate(270);
+        matrix.preScale(1,-1);
         return Bitmap.createBitmap(decodedBitmap, 0, 0, w, h, matrix, true);
     }
 
@@ -124,7 +139,7 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode){
-            case CAMERA_REQUEST_CODE:{
+            case REQUEST_CODE:{
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     surfaceHolder.addCallback(this);
                     surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -134,5 +149,16 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
                 break;
             }
         }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.PNG,100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public static Uri getCapturedImage() {
+        return tempUri;
     }
 }

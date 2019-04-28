@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class AddFile extends Fragment {
 
-    public static final int PICK_IMAGE = 1;
+    public static final int PICK_IMAGE = 2;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

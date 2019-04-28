@@ -15,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,14 +30,21 @@ import java.util.Locale;
 
 public class AddActivity extends AppCompatActivity {
 
+    // firebase
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private FirebaseAuth auth;
+
+    // geo
     private LocationManager locationManager;
-    private double longitude;
-    private double latitude;
+    private Location location;
+    private String city = "";
     private static final int MY_PERMISSION_REQUEST_LOCATION = 1;
-    public static final int PICK_IMAGE = 1;
+
+    // images
+    public static final int TAKE_PHOTO = 1;
+    public static final int PICK_IMAGE = 2;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,31 +82,25 @@ public class AddActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 viewPager.setCurrentItem(3);
+                if(imageUri == null){
+                    imageUri = (Uri) AddCamera.getCapturedImage();
+                }
             }
         });
 
 
         // get city
         if(ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(AddActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)){
-                ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_REQUEST_LOCATION);
-            }else{
-                ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_REQUEST_LOCATION);
-            }
+            ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_REQUEST_LOCATION);
         }else{
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             try {
-                String city = hereLocation(location.getLatitude(), location.getLongitude());
-                Log.d("CITY", "onCreate: " + city);
+                city = getLocation(location.getLatitude(), location.getLongitude());
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Not found!", Toast.LENGTH_SHORT).show();
             }
         }
-
-
-
     }
 
     @Override
@@ -109,14 +109,12 @@ public class AddActivity extends AppCompatActivity {
             case MY_PERMISSION_REQUEST_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         try{
-                            String city = hereLocation(location.getLatitude(), location.getLongitude());
-                            Log.d("CITY", "onCreate: " + city);
+                            city = getLocation(location.getLatitude(), location.getLongitude());
                         }catch(Exception e){
                             e.printStackTrace();
-                            Toast.makeText(this, "Not found!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }else{
@@ -127,30 +125,36 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    public String hereLocation(double lat, double lon){
-        String cityName = "";
+    public String getLocation(double lat, double lon){
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addresses;
         try{
             addresses = geocoder.getFromLocation(lat, lon, 1);
             if(addresses.size() > 0){
-                cityName = addresses.get(0).getLocality();
+                city = addresses.get(0).getLocality();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return cityName;
+        return city;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            Uri fullPhotoUri = data.getData();
+            imageUri = data.getData();
             ImageView uploadedImage = findViewById(R.id.uploaded_image);
-            uploadedImage.setImageURI(fullPhotoUri);
+            uploadedImage.setImageURI(imageUri);
         }
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public Uri getImage() {
+        return imageUri;
+    }
 
 
 }
