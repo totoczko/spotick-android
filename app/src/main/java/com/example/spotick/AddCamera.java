@@ -28,7 +28,6 @@ import java.io.IOException;
 
 public class AddCamera extends Fragment implements SurfaceHolder.Callback {
 
-    public static final int TAKE_PHOTO = 1;
     private static Uri tempUri;
 
     ImageView btnCapture;
@@ -39,11 +38,6 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
     ImageView preview;
 
     final int REQUEST_CODE= 1;
-
-    public static AddCamera newInstance(){
-        AddCamera fragment = new AddCamera();
-        return fragment;
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -71,7 +65,6 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
 
 
         jpegCallback = new Camera.PictureCallback(){
-
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 preview = view.findViewById(R.id.camera_preview);
@@ -83,7 +76,6 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
                 camera.release();
 
                 tempUri = getImageUri(getActivity().getApplicationContext(), rotatedBitmap);
-
             }
         };
 
@@ -107,12 +99,10 @@ public class AddCamera extends Fragment implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        Camera.Size size = camera.new Size(640, 480);
         Camera.Parameters parameters;
         parameters = camera.getParameters();
-
         camera.setDisplayOrientation(90);
-
-        parameters.setPreviewFrameRate(0);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         try {
             camera.setPreviewDisplay(surfaceHolder);

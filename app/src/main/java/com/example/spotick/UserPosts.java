@@ -1,12 +1,15 @@
 package com.example.spotick;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserPosts extends Fragment {
@@ -37,21 +42,48 @@ public class UserPosts extends Fragment {
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("posts");
 
-        final List userPostImg = new ArrayList();
-        final UserPostsAdapter adapter =new UserPostsAdapter(view.getContext(), userPostImg);
+        final List userPosts = new ArrayList();
+        final UserPostsAdapter adapter = new UserPostsAdapter(view.getContext(), userPosts);
         gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Post thisPost = (Post) userPosts.get(i);
+                Intent intent_post = new Intent(getContext(), PostActivity.class);
+                intent_post.putExtra("post", thisPost);
+                startActivity(intent_post);
+            }
+        });
 
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Post singlePost = dataSnapshot.getValue(Post.class);
-                String singlePostImg = singlePost.getImg();
                 String singlePostUserId= (String) singlePost.user.get("id");
                 Boolean isUserPost = singlePostUserId.equals(currentUser.getUid());
-
                if(isUserPost){
-                   userPostImg.add(singlePostImg);
+                   Log.d("LIKES ", "onChildAdded: " + singlePost.likes.get("count").toString());
+                   userPosts.add(new Post(
+                           singlePost.id,
+                           singlePost.shortText,
+                           singlePost.geo,
+                           singlePost.data,
+                           singlePost.imageid,
+                           singlePost.img,
+                           (Long) singlePost.likes.get("count"),
+                           (String) singlePost.user.get("name"),
+                           (String) singlePost.user.get("color"),
+                           (String) singlePost.user.get("id")
+                   ));
+
+                   Collections.sort(userPosts, new Comparator<Post>(){
+                       public int compare(Post obj1, Post obj2) {
+                           return Long.valueOf(obj2.data).compareTo(Long.valueOf(obj1.data));
+                       }
+                   });
+
                    adapter.notifyDataSetChanged();
                }
 

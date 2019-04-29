@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +43,23 @@ public class UserLikes extends Fragment {
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("posts");
 
-        final List userLikedImg = new ArrayList();
-        final UserPostsAdapter adapter =new UserPostsAdapter(view.getContext(), userLikedImg);
+        final List userLikes = new ArrayList();
+        final UserPostsAdapter adapter =new UserPostsAdapter(view.getContext(), userLikes);
         gridView.setAdapter(adapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getContext(), "Clicked " + userLikes.get(i), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Post singlePost = dataSnapshot.getValue(Post.class);
-                String singlePostImg = singlePost.getImg();
 
                 Map<String, Object> likesCount = singlePost.getLikes();
                 ArrayList<String> likedBy = (ArrayList<String>) likesCount.get("users");
@@ -57,7 +68,24 @@ public class UserLikes extends Fragment {
                     for (String user : likedBy) {
                         Boolean isLikedByUser = user.equals(currentUser.getUid());
                         if(isLikedByUser){
-                            userLikedImg.add(singlePostImg);
+                            userLikes.add(new Post(
+                                    singlePost.id,
+                                    singlePost.shortText,
+                                    singlePost.geo, (long)
+                                    singlePost.data,
+                                    singlePost.imageid,
+                                    singlePost.img, (Long)
+                                    singlePost.likes.get("count"),
+                                    (String) singlePost.user.get("name"),
+                                    (String) singlePost.user.get("color"),
+                                    (String) singlePost.user.get("id")
+                            ));
+
+                            Collections.sort(userLikes, new Comparator<Post>(){
+                                public int compare(Post obj1, Post obj2) {
+                                    return Long.valueOf(obj2.data).compareTo(Long.valueOf(obj1.data));
+                                }
+                            });
                             adapter.notifyDataSetChanged();
                         }
                     }

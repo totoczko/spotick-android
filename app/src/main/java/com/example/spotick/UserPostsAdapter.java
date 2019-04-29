@@ -13,22 +13,22 @@ import java.util.List;
 
 public class UserPostsAdapter extends BaseAdapter {
     private Context mContext;
-    private List mThumbIds;
+    private List<Post> userPostsList;
 
     // Constructor
-    public UserPostsAdapter(Context c, List t){
-        mContext = c;
-        mThumbIds = t;
+    public UserPostsAdapter(Context mContext, List<Post> userPostsList){
+        this.mContext = mContext;
+        this.userPostsList = userPostsList;
     }
 
     @Override
     public int getCount() {
-        return mThumbIds.size();
+        return userPostsList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mThumbIds.get(position);
+        return userPostsList.get(position);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserPostsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mContext);
         Glide.with(mContext)
-                .load(mThumbIds.get(position))
+                .load(userPostsList.get(position).getImg())
                 .into(imageView);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new GridView.LayoutParams(550, 550));

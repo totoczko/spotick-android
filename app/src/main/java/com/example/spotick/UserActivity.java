@@ -11,6 +11,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -127,6 +129,15 @@ public class UserActivity extends AppCompatActivity {
             Intent intent_login = new Intent(UserActivity.this, LoginActivity.class);
             startActivity(intent_login);
         }
+
+        // settings
+        Button settings = (Button) findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent_settings = new Intent(UserActivity.this, SettingsActivity.class);
+                startActivity(intent_settings);
+            }
+        });
 
     }
 

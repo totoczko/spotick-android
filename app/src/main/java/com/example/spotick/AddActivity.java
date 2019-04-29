@@ -42,8 +42,7 @@ public class AddActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_REQUEST_LOCATION = 1;
 
     // images
-    public static final int TAKE_PHOTO = 1;
-    public static final int PICK_IMAGE = 2;
+    public static final int PICK_IMAGE = 1;
     private Uri imageUri;
 
     @Override
