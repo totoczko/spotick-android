@@ -35,16 +35,29 @@ public class UserActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Intent intent_main = new Intent(UserActivity.this, MainActivity.class);
                     startActivity(intent_main);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent_add = new Intent(UserActivity.this, AddActivity.class);
-                    startActivity(intent_add);
+                    if(currentUser != null){
+                        Intent intent_add = new Intent(UserActivity.this, AddActivity.class);
+                        startActivity(intent_add);
+                    }else{
+                        Intent intent_login = new Intent(UserActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
                 case R.id.navigation_notifications:
+                    if(currentUser != null){
+                        return true;
+                    }else{
+                        Intent intent_login = new Intent(UserActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
             }
             return false;

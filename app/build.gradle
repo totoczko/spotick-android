@@ -38,6 +38,7 @@ dependencies {
     implementation 'android.arch.work:work-runtime:1.0.1'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 //    implementation 'com.github.florent37:expansionpanel:1.2.2'
+    implementation 'com.robertlevonyan.view:MaterialExpansionPanel:1.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

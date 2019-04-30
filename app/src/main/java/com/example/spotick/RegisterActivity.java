@@ -37,18 +37,30 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            auth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = auth.getCurrentUser();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Intent intent_main = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent_main);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent_add = new Intent(RegisterActivity.this, AddActivity.class);
-                    startActivity(intent_add);
+                    if(currentUser != null){
+                        Intent intent_add = new Intent(RegisterActivity.this, AddActivity.class);
+                        startActivity(intent_add);
+                    }else{
+                        Intent intent_login = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intent_user = new Intent(RegisterActivity.this, UserActivity.class);
-                    startActivity(intent_user);
+                    if(currentUser != null){
+                        Intent intent_user = new Intent(RegisterActivity.this, UserActivity.class);
+                        startActivity(intent_user);
+                    }else{
+                        Intent intent_login = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
             }
             return false;

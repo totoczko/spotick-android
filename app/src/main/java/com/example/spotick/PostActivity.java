@@ -36,18 +36,30 @@ public class PostActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Intent intent_main = new Intent(PostActivity.this, MainActivity.class);
                     startActivity(intent_main);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent_add = new Intent(PostActivity.this, AddActivity.class);
-                    startActivity(intent_add);
+                    if(currentUser != null){
+                        Intent intent_add = new Intent(PostActivity.this, AddActivity.class);
+                        startActivity(intent_add);
+                    }else{
+                        Intent intent_login = new Intent(PostActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intent_user = new Intent(PostActivity.this, UserActivity.class);
-                    startActivity(intent_user);
+                    if(currentUser != null){
+                        Intent intent_user = new Intent(PostActivity.this, UserActivity.class);
+                        startActivity(intent_user);
+                    }else{
+                        Intent intent_login = new Intent(PostActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
             }
             return false;

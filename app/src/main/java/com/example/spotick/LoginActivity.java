@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,18 +31,28 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            auth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = auth.getCurrentUser();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Intent intent_main = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent_main);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent_add = new Intent(LoginActivity.this, AddActivity.class);
-                    startActivity(intent_add);
+                    if(currentUser != null){
+                        Intent intent_add = new Intent(LoginActivity.this, AddActivity.class);
+                        startActivity(intent_add);
+                    }else{
+                        return true;
+                    }
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intent_user = new Intent(LoginActivity.this, UserActivity.class);
-                    startActivity(intent_user);
+                    if(currentUser != null){
+                        Intent intent_user = new Intent(LoginActivity.this, UserActivity.class);
+                        startActivity(intent_user);
+                    }else {
+                        return true;
+                    }
                     return true;
             }
             return false;

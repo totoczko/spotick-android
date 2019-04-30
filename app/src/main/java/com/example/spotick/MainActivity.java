@@ -36,16 +36,28 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent_add = new Intent(MainActivity.this, AddActivity.class);
-                    startActivity(intent_add);
+                    if(currentUser != null){
+                        Intent intent_add = new Intent(MainActivity.this, AddActivity.class);
+                        startActivity(intent_add);
+                    }else{
+                        Intent intent_login = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
-                    startActivity(intent_user);
+                    if(currentUser != null){
+                        Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
+                        startActivity(intent_user);
+                    }else{
+                        Intent intent_login = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent_login);
+                    }
                     return true;
             }
             return false;
@@ -59,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
-//        mAuth.signOut();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null){
