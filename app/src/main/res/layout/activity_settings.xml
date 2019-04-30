@@ -1,39 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical"
+    android:padding="16dp">
 
 
-    <Button
-        android:id="@+id/subscribeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Subscribe to news"
-        app:layout_constraintBottom_toTopOf="@+id/logTokenButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!--<LinearLayout-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--&gt;-->
 
-    <Button
-        android:id="@+id/logTokenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Log token"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <!--<com.github.florent37.expansionpanel.ExpansionHeader-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--app:expansion_headerIndicator="@id/headerIndicator"-->
+                    <!--app:expansion_layout="@id/expansionLayout"-->
+                    <!--app:expansion_toggleOnClick="true">-->
 
-</android.support.constraint.ConstraintLayout>
+                        <!--&lt;!&ndash; HEADER &ndash;&gt;-->
+                        <!--<TextView-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:text="Login"-->
+                            <!--android:textColor="#3E3E3E" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="120dp"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:text="login"-->
+                            <!--android:textColor="#AAA" />-->
+
+                        <!--&lt;!&ndash; HEADER INDICATOR &ndash;&gt;-->
+                        <!--<ImageView-->
+                            <!--android:adjustViewBounds="true"-->
+                            <!--android:id="@+id/headerIndicator"-->
+                            <!--android:layout_gravity="center_vertical|right"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="16dp"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />-->
+
+
+                <!--</com.github.florent37.expansionpanel.ExpansionHeader>-->
+
+                <!--<com.github.florent37.expansionpanel.ExpansionLayout-->
+                    <!--android:id="@+id/expansionLayout"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_width="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/login_h2"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Zmień nazwę użytkownika" />-->
+
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/edit_login"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:ems="10"-->
+                            <!--android:inputType="textPersonName"-->
+                            <!--android:layout_marginTop="8dp"-->
+                            <!--android:layout_marginBottom="16dp"-->
+                            <!--tools:layout_editor_absoluteX="48dp"-->
+                            <!--tools:layout_editor_absoluteY="54dp" />-->
+
+                <!--</com.github.florent37.expansionpanel.ExpansionLayout>-->
+        <!--</LinearLayout>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/subscribeButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:text="Subscribe to news"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/logTokenButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:text="Log token"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.528"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintVertical_bias="0.988" />-->
+
+
+
+        <TextView
+            android:id="@+id/email_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="48dp"
+            tools:layout_editor_absoluteY="208dp" />
+
+        <TextView
+            android:id="@+id/email_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zmień swój adres email"
+            tools:layout_editor_absoluteX="47dp"
+            tools:layout_editor_absoluteY="35dp" />
+
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textEmailAddress"
+            tools:layout_editor_absoluteX="46dp"
+            tools:layout_editor_absoluteY="162dp" />
+
+
+        <TextView
+            android:id="@+id/password_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hasło"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="46dp"
+            tools:layout_editor_absoluteY="138dp" />
+
+        <TextView
+            android:id="@+id/password_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zmień hasło"
+            tools:layout_editor_absoluteX="49dp"
+            tools:layout_editor_absoluteY="227dp" />
+
+
+        <EditText
+            android:id="@+id/edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="256dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:id="@+id/notifications_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Powiadomienia"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="45dp"
+                tools:layout_editor_absoluteY="339dp" />
+
+            <Switch
+                android:id="@+id/notifications_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="288dp"
+                tools:layout_editor_absoluteY="339dp"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wyloguj się"
+            tools:layout_editor_absoluteX="44dp"
+            tools:layout_editor_absoluteY="391dp"
+            android:background="@color/background"
+            android:textAlignment="viewStart"
+            android:textColor="@color/red"/>
+
+
+</LinearLayout>

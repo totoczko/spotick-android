@@ -1,5 +1,6 @@
 package com.example.spotick;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,7 +51,19 @@ public class UserLikes extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "Clicked " + userLikes.get(i), Toast.LENGTH_SHORT).show();
+                Post thisPost = (Post) userLikes.get(i);
+                Intent intent_post = new Intent(getContext(), PostActivity.class);
+                intent_post.putExtra("post_id", thisPost.getId());
+                intent_post.putExtra("post_short_text", thisPost.getShortText());
+                intent_post.putExtra("post_geo", thisPost.getGeo());
+                intent_post.putExtra("post_data", thisPost.getData());
+                intent_post.putExtra("post_image_id", thisPost.getImageid());
+                intent_post.putExtra("post_img", thisPost.getImg());
+                intent_post.putExtra("post_likes", thisPost.getLikesCount());
+                intent_post.putExtra("post_user_name", thisPost.getUserName());
+                intent_post.putExtra("post_user_color", thisPost.getUserColor());
+                intent_post.putExtra("post_user_id", thisPost.getUserId());
+                startActivity(intent_post);
             }
         });
 
@@ -71,11 +83,11 @@ public class UserLikes extends Fragment {
                             userLikes.add(new Post(
                                     singlePost.id,
                                     singlePost.shortText,
-                                    singlePost.geo, (long)
+                                    singlePost.geo,
                                     singlePost.data,
                                     singlePost.imageid,
-                                    singlePost.img, (Long)
-                                    singlePost.likes.get("count"),
+                                    singlePost.img,
+                                    (Long) singlePost.likes.get("count"),
                                     (String) singlePost.user.get("name"),
                                     (String) singlePost.user.get("color"),
                                     (String) singlePost.user.get("id")

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,16 @@ public class UserPosts extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Post thisPost = (Post) userPosts.get(i);
                 Intent intent_post = new Intent(getContext(), PostActivity.class);
-                intent_post.putExtra("post", thisPost);
+                intent_post.putExtra("post_id", thisPost.getId());
+                intent_post.putExtra("post_short_text", thisPost.getShortText());
+                intent_post.putExtra("post_geo", thisPost.getGeo());
+                intent_post.putExtra("post_data", thisPost.getData());
+                intent_post.putExtra("post_image_id", thisPost.getImageid());
+                intent_post.putExtra("post_img", thisPost.getImg());
+                intent_post.putExtra("post_likes", thisPost.getLikesCount());
+                intent_post.putExtra("post_user_name", thisPost.getUserName());
+                intent_post.putExtra("post_user_color", thisPost.getUserColor());
+                intent_post.putExtra("post_user_id", thisPost.getUserId());
                 startActivity(intent_post);
             }
         });
@@ -64,7 +72,6 @@ public class UserPosts extends Fragment {
                 String singlePostUserId= (String) singlePost.user.get("id");
                 Boolean isUserPost = singlePostUserId.equals(currentUser.getUid());
                if(isUserPost){
-                   Log.d("LIKES ", "onChildAdded: " + singlePost.likes.get("count").toString());
                    userPosts.add(new Post(
                            singlePost.id,
                            singlePost.shortText,

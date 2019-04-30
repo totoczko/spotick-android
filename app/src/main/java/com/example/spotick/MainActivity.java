@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,13 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private FirebaseAuth mAuth;
+    private ArrayList<Post> PostList = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         RecyclerView recyclerView = findViewById(R.id.post_list);
-        final List PostList = new ArrayList();
+//        final List PostList = new ArrayList();
         final PostAdapter adapter = new PostAdapter(this,PostList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -117,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String key = dataSnapshot.getKey();
+                for (Post removedPost : PostList) {
+
+                    if (key.equals(removedPost.getId())) {
+                        PostList.remove(removedPost);
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(MainActivity.this, removedPost.getId(), Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                }
+
 
             }
 
