@@ -5,23 +5,23 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> {
 
@@ -29,6 +29,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
     List<Post> mData;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private DatabaseReference postRef;
+    private FirebaseDatabase database;
+
 
     public PostAdapter(Context mContext, List<Post> mData) {
         this.mContext = mContext;
@@ -43,51 +46,84 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
 
         return new myViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, final int position) {
-
-        final Post singlePost = mData.get(position);
+        holder.setIsRecyclable(false);
+        Integer currentPosition =getItemViewType(position);
+        final Post singlePost = mData.get(currentPosition);
 
         Glide.with(mContext)
-                .load(mData.get(position).getImg())
+                .load(singlePost.getImg())
                 .into(holder.postImage);
-        holder.shortText.setText(mData.get(position).getShortText());
-        holder.likesCounter.setText(String.valueOf(mData.get(position).getLikesCount()));
-        holder.location.setText(mData.get(position).getGeo());
-        holder.date.setText(mData.get(position).getDataString());
-        holder.userName.setText(mData.get(position).getUserName());
-        holder.avatar.setText(String.valueOf(mData.get(position).getUserFirstLetter()));
-        String color = mData.get(position).getUserColor();
-        Drawable drawable = mContext.getResources().getDrawable(R.drawable.avatar);
-        drawable.setColorFilter(Color.parseColor(color), PorterDuff.Mode.SRC_ATOP);
-        holder.avatar.setBackgroundDrawable(drawable);
+        holder.shortText.setText(singlePost.getShortText());
+        holder.likesButton.setText(String.valueOf(singlePost.getLikesCount()));
+        holder.location.setText(singlePost.getGeo());
+        holder.date.setText(singlePost.getDataString());
+        holder.userName.setText(singlePost.getUserName());
+        holder.avatar.setText(String.valueOf(singlePost.getUserFirstLetter()));
+        String color = singlePost.getUserColor();
+        Drawable drawableAvatar = mContext.getResources().getDrawable(R.drawable.avatar);
+        drawableAvatar.setColorFilter(Color.parseColor(color), PorterDuff.Mode.SRC_ATOP);
+        holder.avatar.setBackgroundDrawable(drawableAvatar);
 
-        holder.like.setOnClickListener(new View.OnClickListener(){
+        ArrayList<String> likedBy;
+        likedBy = singlePost.getLikesUsers();
+        final Boolean[] isLiked = {false, false};
+        if (likedBy != null) {
+            for (String user : likedBy) {
+                if(user.equals(currentUser.getUid())){
+                    isLiked[0] = true;
+                    isLiked[1] = true;
+                    Drawable drawableIcon = mContext.getResources().getDrawable(R.drawable.ic_favorite).mutate();
+                    drawableIcon = DrawableCompat.wrap(drawableIcon);
+                    DrawableCompat.setTint(drawableIcon, Color.RED);
+                    DrawableCompat.setTintMode(drawableIcon, PorterDuff.Mode.SRC_ATOP);
+                    holder.likesButton.setCompoundDrawablesWithIntrinsicBounds(drawableIcon, null, null, null);
+                }
+            }
+        }
+
+
+        holder.likesButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Map<String, Object> likes = new HashMap<>();
-                likes = singlePost.getLikes();
-                Toast.makeText(view.getContext(), String.valueOf(likes), Toast.LENGTH_LONG).show();
+                Button likesButton = view.findViewById(R.id.likes_button);
+                Long count = singlePost.getLikesCount();
+                postRef = database.getReference().child("posts").child(singlePost.id).child("likes");
 
-                Map<String, Object> likesCount = mData.get(position).getLikes();
-                ArrayList<String> likedBy = (ArrayList<String>) likesCount.get("users");
+                Drawable drawableIcon = mContext.getResources().getDrawable(R.drawable.ic_favorite).mutate();
+                drawableIcon = DrawableCompat.wrap(drawableIcon);
 
-                if (likedBy != null) {
-                    for (String user : likedBy) {
-                        Boolean isLikedByUser = user.equals(currentUser.getUid());
-                        if (!isLikedByUser) {
-                            Toast.makeText(view.getContext(), "not liked!", Toast.LENGTH_LONG).show();
-                            view.getBackground().setColorFilter(view.getResources().getColor(R.color.red), PorterDuff.Mode.MULTIPLY);
-                        }else{
-                            Toast.makeText(view.getContext(), "liked!", Toast.LENGTH_LONG).show();
-                            view.getBackground().setColorFilter(view.getResources().getColor(R.color.colorLightGray), PorterDuff.Mode.MULTIPLY);
-                        }
-                    }
+                if (isLiked[0] && isLiked[1]){
+                    isLiked[0] = false;
+                    postRef.child("count").setValue(count - 1);
+                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
+                    likesButton.setText(String.valueOf(count - 1));
+                }else if (isLiked[0] && !isLiked[1]){
+                    isLiked[0] = false;
+                    postRef.child("count").setValue(count);
+                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
+                    likesButton.setText(String.valueOf(count));
+                }else if(!isLiked[0] && !isLiked[1]){
+                    isLiked[0] = true;
+                    postRef.child("count").setValue(count + 1);
+                    DrawableCompat.setTint(drawableIcon, Color.RED);
+                    likesButton.setText(String.valueOf(count + 1));
+                }else if(!isLiked[0] && isLiked[1]){
+                    isLiked[0] = true;
+                    postRef.child("count").setValue(count);
+                    DrawableCompat.setTint(drawableIcon, Color.RED);
+                    likesButton.setText(String.valueOf(count));
                 }
+
+                DrawableCompat.setTintMode(drawableIcon, PorterDuff.Mode.SRC_ATOP);
+                likesButton.setCompoundDrawablesWithIntrinsicBounds(drawableIcon, null, null, null);
+
             }
         });
 
@@ -98,24 +134,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
         return mData.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class myViewHolder extends RecyclerView.ViewHolder{
 
         ImageView postImage;
-        TextView shortText, likesCounter, location, date, userName, avatar;
-        ImageButton like;
+        TextView shortText, location, date, userName, avatar;
+        Button likesButton;
 
 
         public myViewHolder(View itemView){
             super(itemView);
             postImage = itemView.findViewById(R.id.post_image);
             shortText = itemView.findViewById(R.id.short_text);
-            likesCounter = itemView.findViewById(R.id.likes_counter);
+            likesButton = itemView.findViewById(R.id.likes_button);
             location = itemView.findViewById(R.id.location);
             date = itemView.findViewById(R.id.date);
             userName = itemView.findViewById(R.id.username);
             avatar = itemView.findViewById(R.id.avatar);
-            like = itemView.findViewById(R.id.likes_button);
-
         }
     }
 }

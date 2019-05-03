@@ -147,7 +147,7 @@ public class AddInfo  extends Fragment {
     }
 
     private void writeNewPost(String id, String shortText, String geo, Long data, String imageId, String img, String userName, String userColor, String userId) {
-        Post post = new Post(id, shortText, geo, data, imageId, img, (long) 0, userName, userColor, userId);
+        Post post = new Post(id, shortText, geo, data, imageId, img, (long) 0, null, userName, userColor, userId);
         databaseRef.child(id).setValue(post);
         databaseRef.child(id).child("user").child("id").setValue(userId);
         databaseRef.child(id).child("user").child("name").setValue(userName);

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +28,13 @@ public class Post implements Parcelable {
     public String userId;
     public Map<String, Object> likes = new HashMap<>();
     public Long likesCount;
+    public ArrayList<String> likesUsers;
 
     public Post() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Post(String id, String shortText, String geo, Long data, String imageid, String img, Long likesCount, String userName, String userColor, String userId) {
+    public Post(String id, String shortText, String geo, Long data, String imageid, String img, Long likesCount, ArrayList<String> likesUsers, String userName, String userColor, String userId) {
         this.id = id;
         this.shortText = shortText;
         this.geo = geo;
@@ -40,6 +42,7 @@ public class Post implements Parcelable {
         this.imageid = imageid;
         this.img = img;
         this.likesCount = likesCount;
+        this.likesUsers = likesUsers;
         this.userName = userName;
         this.userColor= userColor;
         this.userId= userId;
@@ -53,6 +56,7 @@ public class Post implements Parcelable {
         imageid = in.readString();
         img = in.readString();
         likesCount = in.readLong();
+        likesUsers = (ArrayList<String>) in.readArrayList(null);
         userName = in.readString();
         userColor = in.readString();
         userId = in.readString();
@@ -102,6 +106,10 @@ public class Post implements Parcelable {
         return likesCount;
     }
 
+    public ArrayList<String> getLikesUsers(){
+        return likesUsers;
+    }
+
     public String getShortText() {
         return shortText;
     }
@@ -143,6 +151,8 @@ public class Post implements Parcelable {
         dest.writeString(geo);
         dest.writeLong(data);
         dest.writeString(imageid);
+        dest.writeLong(likesCount);
+        dest.writeList(likesUsers);
         dest.writeString(img);
         dest.writeString(userName);
         dest.writeString(userColor);

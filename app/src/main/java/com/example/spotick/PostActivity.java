@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 
 public class PostActivity extends AppCompatActivity {
 
@@ -86,11 +88,12 @@ public class PostActivity extends AppCompatActivity {
         String post_image_id = (String) extras.get("post_image_id");
         String post_img = (String) extras.get("post_img");
         Long post_likes = (Long) extras.get("post_likes");
+        ArrayList<String> post_likes_users = (ArrayList<String>) extras.get("post_likes_users");
         String post_user_name = (String) extras.get("post_user_name");
         String post_user_color = (String) extras.get("post_user_color");
         String post_user_id = (String) extras.get("post_user_id");
 
-        Post post = new Post(post_id, post_short_text, post_geo, post_data, post_image_id, post_img, post_likes, post_user_name, post_user_color, post_user_id);
+        Post post = new Post(post_id, post_short_text, post_geo, post_data, post_image_id, post_img, post_likes, post_likes_users, post_user_name, post_user_color, post_user_id);
 
         postImage = findViewById(R.id.post_image);
         shortText = findViewById(R.id.short_text);

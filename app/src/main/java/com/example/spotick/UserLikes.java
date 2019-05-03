@@ -60,6 +60,7 @@ public class UserLikes extends Fragment {
                 intent_post.putExtra("post_image_id", thisPost.getImageid());
                 intent_post.putExtra("post_img", thisPost.getImg());
                 intent_post.putExtra("post_likes", thisPost.getLikesCount());
+                intent_post.putExtra("post_likes_users", thisPost.getLikesUsers());
                 intent_post.putExtra("post_user_name", thisPost.getUserName());
                 intent_post.putExtra("post_user_color", thisPost.getUserColor());
                 intent_post.putExtra("post_user_id", thisPost.getUserId());
@@ -88,6 +89,7 @@ public class UserLikes extends Fragment {
                                     singlePost.imageid,
                                     singlePost.img,
                                     (Long) singlePost.likes.get("count"),
+                                    (ArrayList<String>) singlePost.likes.get("users"),
                                     (String) singlePost.user.get("name"),
                                     (String) singlePost.user.get("color"),
                                     (String) singlePost.user.get("id")

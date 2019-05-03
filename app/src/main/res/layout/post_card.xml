@@ -76,40 +76,32 @@
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/post_image"
-                android:layout_toRightOf="@+id/marker"
-                android:paddingTop="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp"
-                android:text="Warszawa"
-                android:textSize="14dp" />
-
-            <ImageButton
-                android:id="@+id/likes_button"
-                android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_below="@+id/post_image"
-                android:layout_alignLeft="@+id/likes_counter"
-                android:layout_marginLeft="-40dp"
-                android:layout_marginTop="0dp"
-                android:background="#fff"
-                android:padding="16dp"
-                android:clickable="true"
-                app:srcCompat="@drawable/ic_favorite" />
+                android:layout_toRightOf="@+id/marker"
+                android:paddingTop="18dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="8dp"
+                android:paddingBottom="16dp"
+                android:text="Warszawa"
+                android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/likes_counter"
+            <Button
+                android:id="@+id/likes_button"
                 android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/post_image"
-                android:layout_alignEnd="@+id/post_image"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="-247dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_favorite"
                 android:padding="16dp"
                 android:text="3"
-                android:textSize="14dp" />
-
+                android:textColor="@color/colorLightGray"
+                android:textAlignment="center"
+                android:tint="@color/colorLightGray"
+                style="?android:attr/borderlessButtonStyle"/>
 
             <TextView
                 android:id="@+id/short_text"
