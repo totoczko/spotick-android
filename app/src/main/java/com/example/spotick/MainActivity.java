@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private FirebaseAuth mAuth;
     private ArrayList<Post> PostList = new ArrayList<>();
+    private ArrayList<String> PostList2 = new ArrayList<String>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
                         (String) singlePost.user.get("color"),
                         (String) singlePost.user.get("id")
                 ));
+
+
+
+                Bundle args=new Bundle();
+                String singlePostString = singlePost.toString();
+                args.putString("singlePostString", singlePostString);
+                PostList2.add(singlePostString);
+
 
                 Collections.sort(PostList, new Comparator<Post>(){
                     public int compare(Post obj1, Post obj2) {

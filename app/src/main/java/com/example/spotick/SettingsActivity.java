@@ -133,6 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        usersRef.child("username").setValue(newLogin);
                                         currentLogin.setText(newLogin);
                                         Toast.makeText(SettingsActivity.this, "Profil zaktualizowany!", Toast.LENGTH_SHORT).show();
                                     }
@@ -150,6 +151,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        usersRef.child("email").setValue(newEmail);
                                         currentEmail.setText(newEmail);
                                         Toast.makeText(SettingsActivity.this, "Profil zaktualizowany!", Toast.LENGTH_SHORT).show();
                                     }else{
