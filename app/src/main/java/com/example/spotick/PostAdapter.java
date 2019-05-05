@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
 
         ArrayList<String> likedBy;
         likedBy = singlePost.getLikesUsers();
+
         final Boolean[] isLiked = {false, false};
         if (likedBy != null) {
             for (String user : likedBy) {
@@ -92,6 +94,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
         holder.likesButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
                 Button likesButton = view.findViewById(R.id.likes_button);
                 Long count = singlePost.getLikesCount();
                 postRef = database.getReference().child("posts").child(singlePost.id).child("likes");
@@ -99,26 +102,70 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
                 Drawable drawableIcon = mContext.getResources().getDrawable(R.drawable.ic_favorite).mutate();
                 drawableIcon = DrawableCompat.wrap(drawableIcon);
 
+                ArrayList<String> users;
+                users = singlePost.getLikesUsers();
+
+                int next = 0;
+
+                if(users != null){
+                    next = users.size();
+                }
+
                 if (isLiked[0] && isLiked[1]){
                     isLiked[0] = false;
                     postRef.child("count").setValue(count - 1);
                     DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
                     likesButton.setText(String.valueOf(count - 1));
+                    if (users != null) {
+                        int i = 0;
+                        for (String user : users) {
+                            if(user.equals(currentUser.getUid())){
+                                users.remove(i);
+                                return;
+                            }
+                            i++;
+                        }
+                    }
+
+                    postRef.child("users").setValue(users);
+
                 }else if (isLiked[0] && !isLiked[1]){
+
                     isLiked[0] = false;
                     postRef.child("count").setValue(count);
                     DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
                     likesButton.setText(String.valueOf(count));
+
+                    if (users != null) {
+                        int i = 0;
+                        for (String user : users) {
+                            if(user.equals(currentUser.getUid())){
+                                users.remove(i);
+                                return;
+                            }
+                            i++;
+                        }
+                    }
+
+                    postRef.child("users").setValue(users);
+
                 }else if(!isLiked[0] && !isLiked[1]){
+
                     isLiked[0] = true;
                     postRef.child("count").setValue(count + 1);
+                    DatabaseReference newUserRef = postRef.child("users/" + next);
+                    newUserRef.setValue(currentUser.getUid());
                     DrawableCompat.setTint(drawableIcon, Color.RED);
                     likesButton.setText(String.valueOf(count + 1));
+
                 }else if(!isLiked[0] && isLiked[1]){
+
                     isLiked[0] = true;
-                    postRef.child("count").setValue(count);
+                    DatabaseReference newUserRef = postRef.child("users/" + next);
+                    newUserRef.setValue(currentUser.getUid());
                     DrawableCompat.setTint(drawableIcon, Color.RED);
                     likesButton.setText(String.valueOf(count));
+
                 }
 
                 DrawableCompat.setTintMode(drawableIcon, PorterDuff.Mode.SRC_ATOP);
