@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private FirebaseAuth mAuth;
     private ArrayList<Post> PostList = new ArrayList<>();
+    private ArrayList<String> IndexList = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
                         (String) singlePost.user.get("id")
                 ));
 
+                IndexList.add(singlePost.id);
+
                 Collections.sort(PostList, new Comparator<Post>(){
                     public int compare(Post obj1, Post obj2) {
                          return Long.valueOf(obj2.data).compareTo(Long.valueOf(obj1.data));
@@ -123,7 +126,34 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Post singlePost = dataSnapshot.getValue(Post.class);
 
+                for (int i=0; i < PostList.size(); i++){
+                    if(PostList.get(i).getId() == singlePost.getId()){
+                        PostList.remove(i);
+                        PostList.add(new Post(
+                                singlePost.id,
+                                singlePost.shortText,
+                                singlePost.geo,
+                                (long) singlePost.data,
+                                singlePost.imageid,
+                                singlePost.img, (Long)
+                                singlePost.likes.get("count"),
+                                (ArrayList<String>) singlePost.likes.get("users"),
+                                (String) singlePost.user.get("name"),
+                                (String) singlePost.user.get("color"),
+                                (String) singlePost.user.get("id")
+                        ));
+                    }
+                }
+
+                Collections.sort(PostList, new Comparator<Post>(){
+                    public int compare(Post obj1, Post obj2) {
+                        return Long.valueOf(obj2.data).compareTo(Long.valueOf(obj1.data));
+                    }
+                });
+
+                adapter.notifyDataSetChanged();
             }
 
             @Override

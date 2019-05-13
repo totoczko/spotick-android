@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -39,6 +40,7 @@ public class AddInfo  extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private String userColor;
+    private FirebaseFunctions mFunctions;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -50,6 +52,7 @@ public class AddInfo  extends Fragment {
         Button btnSend = (Button) view.findViewById(R.id.add_post_button);
 
         auth = FirebaseAuth.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
         final FirebaseUser currentUser = auth.getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
@@ -86,7 +89,7 @@ public class AddInfo  extends Fragment {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     progressDialog.dismiss();
-                                    Toast.makeText(activity.getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(activity.getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
 
                                     if (currentUser != null) {
                                         final String userId = currentUser.getUid();
@@ -153,6 +156,69 @@ public class AddInfo  extends Fragment {
         databaseRef.child(id).child("user").child("name").setValue(userName);
         databaseRef.child(id).child("user").child("color").setValue(userColor);
         databaseRef.child(id).child("likes").child("count").setValue(0);
+
+//        sendNotifications("UDAŁO SIEEE")
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            Exception e = task.getException();
+//                            if (e instanceof FirebaseFunctionsException) {
+//                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+//                                FirebaseFunctionsException.Code code = ffe.getCode();
+//                                Object details = ffe.getDetails();
+//
+//                                Log.d("RESULT", "then: " + code);
+//                                Log.d("RESULT", "then: " + details);
+//
+//                            }
+//
+//                            // ...
+//                        }
+//
+//                        Log.d("RESULT", "SUKCES" );
+//
+//                        // ...
+//                    }
+//                });
     }
+
+
+//    private Task<String> sendNotifications(String text) {
+//        Map<String, Object> data = new HashMap<>();
+//        Subscription test = new Subscription(
+//                "https://fcm.googleapis.com/fcm/send/eQfpiWv6kew:APA91bE0xyJJMwT4BmqhYMhW5JoyTVsCwGS6t5dhFwVvQyzXQesETfb3soMMc-x5NoVL24wEqnyVHvJsz1ehS7InUjuw7VlRNUbg18Xo9RuCeGVAVFud6MDTHLjMfDaXMlWNDoIOxAjo",
+//                "tD6sEYIjJ3v1oSCgNZhT4Q" ,
+//                "BH_A_QOfbJVowdbbeL_TUWl8vxICHKAoQcu1IVx5Kh1Re21ZBmlSqx4kO7MfjX8I4uXOmLEvD3JLdcA_GVwIJbs"
+//        );
+//
+//        List<Subscription> subscriptions = new ArrayList<Subscription>();
+//        subscriptions.add(test);
+////        User from = new User("EGYEqaiVwkYeBdZEN7ZAWlFk9qh2", "test@test.pl", "lolo", "#B63703");
+//
+////        data.put("from", from);
+//        data.put("subscriptions", subscriptions);
+//        data.put("text", text);
+//        data.put("push", true);
+//
+//        Log.d("SUBSCRIPTION", String.valueOf(data));
+//        return mFunctions
+//                .getHttpsCallable("sendNotifications")
+//                .call(data)
+//                .continueWith(new Continuation<HttpsCallableResult, String>() {
+//                    @Override
+//                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+//                        // This continuation runs on either success or failure, but if the task
+//                        // has failed then getResult() will throw an Exception which will be
+//                        // propagated down.
+//                        String result = (String) task.getResult().getData();
+//                        Log.d("RESULT", "then: " + result);
+//
+//                        Toast.makeText(getActivity().getApplicationContext(), "coś tam działą", Toast.LENGTH_SHORT).show();
+//                        return result;
+//                    }
+//            });
+//    }
+
 
 }

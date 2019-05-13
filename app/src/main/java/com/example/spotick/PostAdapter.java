@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,8 +113,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
                 if (isLiked[0] && isLiked[1]){
                     isLiked[0] = false;
                     postRef.child("count").setValue(count - 1);
-                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
-                    likesButton.setText(String.valueOf(count - 1));
+//                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
+//                    likesButton.setText(String.valueOf(count - 1));
                     if (users != null) {
                         int i = 0;
                         for (String user : users) {
@@ -133,8 +132,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
 
                     isLiked[0] = false;
                     postRef.child("count").setValue(count);
-                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
-                    likesButton.setText(String.valueOf(count));
+//                    DrawableCompat.setTint(drawableIcon, Color.LTGRAY);
+//                    likesButton.setText(String.valueOf(count));
 
                     if (users != null) {
                         int i = 0;
@@ -155,16 +154,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
                     postRef.child("count").setValue(count + 1);
                     DatabaseReference newUserRef = postRef.child("users/" + next);
                     newUserRef.setValue(currentUser.getUid());
-                    DrawableCompat.setTint(drawableIcon, Color.RED);
-                    likesButton.setText(String.valueOf(count + 1));
+//                    DrawableCompat.setTint(drawableIcon, Color.RED);
+//                    likesButton.setText(String.valueOf(count + 1));
 
                 }else if(!isLiked[0] && isLiked[1]){
 
                     isLiked[0] = true;
                     DatabaseReference newUserRef = postRef.child("users/" + next);
                     newUserRef.setValue(currentUser.getUid());
-                    DrawableCompat.setTint(drawableIcon, Color.RED);
-                    likesButton.setText(String.valueOf(count));
+//                    DrawableCompat.setTint(drawableIcon, Color.RED);
+//                    likesButton.setText(String.valueOf(count));
 
                 }
 
