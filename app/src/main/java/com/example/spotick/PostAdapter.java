@@ -77,14 +77,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.myViewHolder> 
         final Boolean[] isLiked = {false, false};
         if (likedBy != null) {
             for (String user : likedBy) {
-                if(user.equals(currentUser.getUid())){
-                    isLiked[0] = true;
-                    isLiked[1] = true;
-                    Drawable drawableIcon = mContext.getResources().getDrawable(R.drawable.ic_favorite).mutate();
-                    drawableIcon = DrawableCompat.wrap(drawableIcon);
-                    DrawableCompat.setTint(drawableIcon, Color.RED);
-                    DrawableCompat.setTintMode(drawableIcon, PorterDuff.Mode.SRC_ATOP);
-                    holder.likesButton.setCompoundDrawablesWithIntrinsicBounds(drawableIcon, null, null, null);
+                if(currentUser != null){
+                    if(user.equals(currentUser.getUid())){
+                        isLiked[0] = true;
+                        isLiked[1] = true;
+                        Drawable drawableIcon = mContext.getResources().getDrawable(R.drawable.ic_favorite).mutate();
+                        drawableIcon = DrawableCompat.wrap(drawableIcon);
+                        DrawableCompat.setTint(drawableIcon, Color.RED);
+                        DrawableCompat.setTintMode(drawableIcon, PorterDuff.Mode.SRC_ATOP);
+                        holder.likesButton.setCompoundDrawablesWithIntrinsicBounds(drawableIcon, null, null, null);
+                    }
                 }
             }
         }
